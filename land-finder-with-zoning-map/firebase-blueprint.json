@@ -1,0 +1,126 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "A user profile (buyer or agent) in the land listings platform.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique user ID" },
+        "name": { "type": "string", "description": "Full name" },
+        "email": { "type": "string", "format": "email", "description": "Primary email address" },
+        "password": { "type": "string", "description": "Bcrypt hashed password" },
+        "role": { "type": "string", "enum": ["buyer", "agent"], "description": "User role" },
+        "isVerifiedAgent": { "type": "boolean", "description": "Verified status for agents or buyer roles" },
+        "verificationCode": { "type": "string", "description": "OTP verification code" },
+        "isEmailVerified": { "type": "boolean", "description": "Email address verification state" },
+        "agencyName": { "type": "string", "description": "Optional agency name for agents" },
+        "licenseNumber": { "type": "string", "description": "Optional government land license ID" },
+        "agentPhone": { "type": "string", "description": "Agent contact phone" }
+      },
+      "required": ["id", "name", "email", "password", "role"]
+    },
+    "Listing": {
+      "title": "Listing",
+      "description": "A land parcel listed for sale.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "location": { "type": "string" },
+        "areaName": { "type": "string" },
+        "county": { "type": "string" },
+        "price": { "type": "number" },
+        "acres": { "type": "number" },
+        "zoning": { "type": "string" },
+        "imageUrl": { "type": "string" },
+        "videoUrl": { "type": "string" },
+        "description": { "type": "string" },
+        "coordinates": { "type": "object" },
+        "parcelPolygon": { "type": "array" },
+        "agentId": { "type": "string" },
+        "agentName": { "type": "string" },
+        "agentPhone": { "type": "string" },
+        "agentEmail": { "type": "string" },
+        "landType": { "type": "string" },
+        "soilType": { "type": "string" },
+        "landColor": { "type": "string" },
+        "cropsSuggested": { "type": "string" },
+        "existingPlants": { "type": "string" },
+        "surveyNumber": { "type": "string" },
+        "ownerName": { "type": "string" },
+        "treesCount": { "type": "string" },
+        "state": { "type": "string" },
+        "district": { "type": "string" },
+        "taluk": { "type": "string" },
+        "village": { "type": "string" },
+        "waterSource": { "type": "string" },
+        "electricity": { "type": "string" },
+        "roadAccess": { "type": "string" },
+        "hasSoilTest": { "type": "boolean" },
+        "hasSurvey": { "type": "boolean" },
+        "hub": { "type": "string" },
+        "isUserAdded": { "type": "boolean" }
+      },
+      "required": ["id", "title", "price", "acres", "zoning", "location"]
+    },
+    "Message": {
+      "title": "Message",
+      "description": "A communication message or formal offer from a buyer to an agent.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "listingId": { "type": "string" },
+        "listingTitle": { "type": "string" },
+        "buyerId": { "type": "string" },
+        "buyerName": { "type": "string" },
+        "buyerEmail": { "type": "string" },
+        "agentId": { "type": "string" },
+        "message": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "type": { "type": "string", "enum": ["inquiry", "offer"] },
+        "offerPrice": { "type": "number" },
+        "offerTerms": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "accepted", "rejected", "countered"] },
+        "agentResponse": { "type": "string" }
+      },
+      "required": ["id", "listingId", "buyerId", "agentId", "message", "createdAt", "type", "status"]
+    },
+    "Log": {
+      "title": "Log",
+      "description": "Activity log entry tracking standard sandbox system logins.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "role": { "type": "string" },
+        "timestamp": { "type": "string" },
+        "loginTime": { "type": "string" },
+        "passwordSecure": { "type": "string" },
+        "method": { "type": "string" },
+        "status": { "type": "string" },
+        "userAgent": { "type": "string" }
+      },
+      "required": ["id", "email", "timestamp", "status"]
+    }
+  },
+  "firestore": {
+    "users/{userId}": {
+      "schema": { "$ref": "#/entities/User" },
+      "description": "Registered and authenticated platform user profiles."
+    },
+    "listings/{listingId}": {
+      "schema": { "$ref": "#/entities/Listing" },
+      "description": "Land parcels on real estate directory."
+    },
+    "messages/{messageId}": {
+      "schema": { "$ref": "#/entities/Message" },
+      "description": "Communication inquiries and offers sent from buyers to listed agents."
+    },
+    "logs/{logId}": {
+      "schema": { "$ref": "#/entities/Log" },
+      "description": "Login activity trace records used for transparency audits."
+    }
+  }
+}
